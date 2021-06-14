@@ -1,11 +1,19 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-child',
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })
-export class ChildComponent implements OnInit, OnDestroy, OnChanges {
+export class ChildComponent implements
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  DoCheck,
+  AfterContentInit,
+  AfterContentChecked,
+  AfterViewInit,
+  AfterViewChecked {
 
   childName: string = 'Child Component'
   counter: number = 0;
@@ -35,5 +43,25 @@ export class ChildComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.log(`${this.childName} ngOnChanges called!`);
     console.log(changes);
+  }
+
+  ngDoCheck(): void {
+    console.log(`${this.childName} ngDoCheck called!`);
+  }
+
+  ngAfterContentInit(): void {
+    console.log(`${this.childName} ngAfterContentInit called!`);
+  }
+
+  ngAfterContentChecked(): void {
+    console.log(`${this.childName} ngAfterContentChecked called!`);
+  }
+
+  ngAfterViewInit(): void {
+    console.log(`${this.childName} ngAfterViewInit called!`);
+  }
+
+  ngAfterViewChecked(): void {
+    console.log(`${this.childName} ngAfterViewChecked called!`);
   }
 }
