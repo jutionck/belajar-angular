@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { TemplateModule } from './template/template.module';
+import { PagesModule } from './pages/pages.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +12,9 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    TemplateModule,
+    PagesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
