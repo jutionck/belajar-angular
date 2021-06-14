@@ -1,9 +1,0 @@
-<h2>Parent Component</h2>
-
-<button (click)="toggleChild()">Toggle Child</button>
-
-<!-- Form -->
-<input type="text" [(ngModel)]="bootcampName" />
-
-<!-- Directive ngIf (kondisi) -->
-<app-child *ngIf="isChild" [bootcampName]="bootcampName"></app-child>
