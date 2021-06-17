@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home/home.component';
+import { PagesComponent } from './pages.component';
+import { TemplateModule } from '../template/template.module';
+import { CarouselComponent } from './home/carousel/carousel.component';
 
-const COMPONENTS = [HomeComponent];
+const COMPONENTS = [PagesComponent, CarouselComponent];
 
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [
-    CommonModule
+    CommonModule,
+    TemplateModule
   ],
   exports: [...COMPONENTS]
 })

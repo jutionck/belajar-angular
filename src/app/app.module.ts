@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { TemplateModule } from './template/template.module';
 import { PagesModule } from './pages/pages.module';
+import { TemplateModule } from './template/template.module';
 
 @NgModule({
   declarations: [
@@ -13,8 +13,8 @@ import { PagesModule } from './pages/pages.module';
   imports: [
     BrowserModule,
     FormsModule,
-    TemplateModule,
-    PagesModule
+    PagesModule,
+    TemplateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

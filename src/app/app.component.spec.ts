@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture, inject, async, fakeAsync, tick, flushMicrotasks } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -22,10 +22,13 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('introduction-angular');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('introduction-angular app is running!');
-  });
+  it('should test some asynchronous code', fakeAsync(() => {
+    let flag = false;
+    setTimeout(() => { flag = true; }, 100);
+    expect(flag).toBe(false); // PASSES
+    tick(50);
+    expect(flag).toBe(false); // PASSES
+    tick(50);
+    expect(flag).toBe(true); // PASSES
+  }));
 });
