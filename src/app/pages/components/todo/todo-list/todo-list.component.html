@@ -1,20 +1,13 @@
 <div class="row">
-  <h1>My Todo List</h1>
+  <h1>{{ title }}</h1>
 
-  <!-- <p>sample date: {{ sampleDate }}</p>
-  <p>sample date pipe: {{ sampleDate | date: "fullDate" }}</p>
-  <p>
-    sample date pipe:
-    {{ sampleDate | customedate: undefined:"dddd, DD MM YYYY" }}
-  </p>
-  <p>
-    sample date pipe 2:
-    {{ sampleDate2 | customedate: "DD/MM/YY":"dddd, DD MM YYYY" }}
-  </p> -->
+  <div class="alert alert-info" *ngIf="loading">
+    Mendapatkan data, silahkan tunggu...
+  </div>
 
-  <p>{{ sampleDate | relativefrom }}</p>
-  <p>{{ sampleDate | relativefrom: sampleDate2 }}</p>
-  <p>{{ sampleData | async }}</p>
-
-  <p>Async Pipe {{ promise | async }}</p>
+  <ul class="list-gorup">
+    <li class="list-group-item" *ngFor="let task of tasks">
+      {{ task.id }} - {{ task.label }}
+    </li>
+  </ul>
 </div>

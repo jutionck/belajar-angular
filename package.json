@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:open": "ng serve --open",
     "build": "ng build",
     "test": "ng test",
     "test:coverage": "ng test --no--watch --code-coverage",

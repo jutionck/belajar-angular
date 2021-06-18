@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Todo } from '../model/todo';
+import { TodoService } from '../service/todo.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -7,22 +9,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TodoListComponent implements OnInit {
 
-  sampleDate: Date = new Date();
-  sampleDate2 = '12 Juni 2021';
-  sampleData: Promise<String> = Promise.resolve('sample data with promise')
+  @Input() updated: boolean;
 
-  promise: Promise<any>;
-  constructor() {
-    this.promise = this.getPromise(); (2)
-  }
+  tasks: Todo[] = []
+  title = "My Todo List";
+  loading = false;
 
-  getPromise() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve("Promise complete!"), 3000);
-    });
-  }
+  constructor(
+    private readonly todoService: TodoService
+  ) { }
 
   ngOnInit(): void {
+
+    console.log(this.updated);
+    if (this.updated) {
+
+    }
+
+    this.loading = true;
+    this.todoService.getTask()
+      .then((tasks) => {
+        this.tasks = tasks;
+        this.loading = false
+      })
+
+    // this.todoService.watch()
+    //   .subscribe((update) => {
+    //     if (update) {
+    //       this.loading = true;
+
+    //     }
+    //   })
   }
 
 }

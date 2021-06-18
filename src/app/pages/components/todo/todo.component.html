@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col">
-    <app-todo-list></app-todo-list>
+    <app-todo-list [updated]=""></app-todo-list>
   </div>
   <div class="col">
-    <app-todo-form></app-todo-form>
+    <app-todo-form (outputTask)="onAddTask($event)"></app-todo-form>
   </div>
 </div>
