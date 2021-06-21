@@ -35,7 +35,7 @@ export class TodoFormComponent implements OnInit {
 
     this.loading = true;
     this.todoService.setTask(todo)
-      .then(() => this.todoService.getTask())
+      .then(() => this.todoService.getTaskPromise())
       .then((task) => {
         console.log(task);
         this.loading = false;
