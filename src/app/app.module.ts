@@ -2,11 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
-import { PagesModule } from './pages/pages.module';
-import { TemplateModule } from './template/template.module';
 import { BsInputDirective } from './shared/directives/bs-input/bs-input.directive';
 import { BsButtonDirective } from './shared/directives/bs-button/bs-button.directive';
+import { AppRoutingModule } from './app-routing.module';
+import { PagesModule } from './pages/pages.module';
 
 @NgModule({
   declarations: [
@@ -16,9 +15,8 @@ import { BsButtonDirective } from './shared/directives/bs-button/bs-button.direc
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    PagesModule,
-    TemplateModule
+    AppRoutingModule,
+    PagesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
