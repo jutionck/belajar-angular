@@ -2,19 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PagesComponent } from './pages.component';
 import TemplateModule from '../template/template.module';
-import { CarouselComponent } from './components/carousel/carousel.component';
-import { TodoModule } from './components/todo/todo.module';
 import { PagesRoutingModule } from './pages-routing.module';
+import { UsersModule } from './components/users/users.module';
 
-const COMPONENTS = [PagesComponent, CarouselComponent];
 
 @NgModule({
-  declarations: [...COMPONENTS],
+  declarations: [PagesComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,
     TemplateModule.forRoot(),
+    UsersModule
   ],
-  exports: [...COMPONENTS]
+  exports: [PagesComponent]
 })
 export class PagesModule { }
