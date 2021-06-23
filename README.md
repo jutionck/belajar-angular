@@ -1,27 +1,59 @@
-# IntroductionAngular
+# Angular Hands On - Angular Unit Testing
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.13.
 
-## Development server
+## STEP
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### PART Introduction Unit Testing
 
-## Code scaffolding
+> _Ketika kita membuat sebuah project angular, sebeneranya kita sudah terinstall unit testing bawaan nya yaitu ***karma***, bisa di perlihatkan pada sebuah project trainee terdapat file bernama `karma.conf.json`_
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+> _Untuk melakukan testing pun bisa langsung di praktikan dengan cara mengetikkan `ng test` atau dapat melalui command npm dengan menjalankan `npm run test` silahkan cek pada file `package.json` bagian **script** `"test": "ng test",`_
 
-## Build
+> _Ketika melakukan npm run test akan otomatis browser chrome akan terbuka dan akan melihat hasil testing dari `karma.conf.js`. `karma.conf.js` itu sendiri menggunakan dependency dari **jasmine**_
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+> _Selanjutnya adalah kita akan melihat **coverage** pada sebuah testing_
 
-## Running unit tests
+1. Open `package.json` and add some scripts `test:coverage` as shown below:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```json
+"scripts": {
+    "ng": "ng",
+    "start": "ng serve --open",
+    "build": "ng build",
+    "test": "ng test",
+    "test:coverage": "ng test --no-watch --code-coverage",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  }
+```
 
-## Running end-to-end tests
+2. Trying in your vs code terminal and type this `npm run test:coverage`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+> _Jelaskan bahwa ketika melukan command test file yang terbaca adalah file yang mempunyai nama file `.spec.ts`_
 
-## Further help
+3. Open `app.component.spec.ts`, if not exist, crate a file `app.component.spec.ts` and add script:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```typescript
+describe("AppComponent", () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AppComponent],
+    }).compileComponents();
+  });
+
+  it("should create the app", () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it(`should have as lifecycle 'ngOnInit''`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.ngOnInit).toBeTruthy();
+  });
+});
+```
+
+> _Penjelasan code diatas adalah :_
