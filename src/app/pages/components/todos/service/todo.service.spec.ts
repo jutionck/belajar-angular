@@ -15,6 +15,6 @@ describe('TodoService', () => {
   });
 
   it('test method', () => {
-    expect(service.getTask()).toBeTruthy();
+    expect(service.getTaskPromise()).toBeTruthy();
   })
 });

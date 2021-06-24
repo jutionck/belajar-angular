@@ -2,9 +2,13 @@ import { NgModule } from "@angular/core";
 import { Router, RouterModule, Routes } from "@angular/router";
 import { LandingComponent } from "./components/landing/landing.component";
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'home', pathMatch: 'full'
+  },
+  {
+    path: 'home',
     component: LandingComponent
   }
 ]

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BsInputDirective } from './shared/directives/bs-input/bs-input.directive';
 import { BsButtonDirective } from './shared/directives/bs-button/bs-button.directive';
@@ -15,6 +15,7 @@ import { PagesModule } from './pages/pages.module';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     PagesModule
   ],
