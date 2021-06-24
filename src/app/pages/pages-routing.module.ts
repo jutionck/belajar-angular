@@ -9,7 +9,6 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
         loadChildren: () => import('./components/landings/landing.module')
           .then((m) => m.LandingModule) // Lazy load
       },

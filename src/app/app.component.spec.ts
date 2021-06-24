@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, inject, async, fakeAsync, tick, flushMicrotasks } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -31,4 +31,5 @@ describe('AppComponent', () => {
     tick(50);
     expect(flag).toBe(true); // PASSES
   }));
+
 });
