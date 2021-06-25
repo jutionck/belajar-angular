@@ -6,12 +6,14 @@ import { BsInputDirective } from './shared/directives/bs-input/bs-input.directiv
 import { BsButtonDirective } from './shared/directives/bs-button/bs-button.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
+import { DemoTestingComponent } from './demo-testing/demo-testing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BsInputDirective,
     BsButtonDirective,
+    DemoTestingComponent,
   ],
   imports: [
     BrowserModule,
