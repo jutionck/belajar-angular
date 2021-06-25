@@ -6,20 +6,23 @@ import { BsInputDirective } from './shared/directives/bs-input/bs-input.directiv
 import { BsButtonDirective } from './shared/directives/bs-button/bs-button.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
+import { LoginModule } from './login/login.module';
+import { RouteGuard } from './shared/guards/route-guards';
 
 @NgModule({
   declarations: [
     AppComponent,
     BsInputDirective,
-    BsButtonDirective,
+    BsButtonDirective
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    PagesModule
+    PagesModule,
+    LoginModule
   ],
-  providers: [],
+  providers: [RouteGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

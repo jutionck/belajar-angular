@@ -6,6 +6,7 @@ import { ListUserComponent } from './components/list/list-user.component';
 import { UserService } from './service/user.service';
 import { FormUserComponent } from './components/form/form-user.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     UsersRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   providers: [
     UserService
