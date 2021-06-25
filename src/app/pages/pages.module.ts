@@ -4,6 +4,7 @@ import { PagesComponent } from './pages.component';
 import TemplateModule from '../template/template.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { UsersModule } from './components/users/users.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { UsersModule } from './components/users/users.module';
     CommonModule,
     PagesRoutingModule,
     TemplateModule.forRoot(),
-    UsersModule
+    UsersModule,
+    SharedModule
   ],
   exports: [PagesComponent]
 })
