@@ -12,17 +12,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./components/landings/landing.module')
+        loadChildren: () => import('./landings/landing.module')
           .then((m) => m.LandingModule) // Lazy load
       },
       {
         path: 'todos',
-        loadChildren: () => import('./components/todos/todo.module')
+        loadChildren: () => import('./todos/todo.module')
           .then((m) => m.TodoModule)
       },
       {
         path: 'users',
-        loadChildren: () => import('./components/users/users.module')
+        loadChildren: () => import('./users/users.module')
           .then((m) => m.UsersModule)
       }
     ]

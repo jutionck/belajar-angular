@@ -2,13 +2,12 @@ import { ThrowStmt } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { constants } from 'buffer';
-import { Todo } from '../model/todo';
-import { TodoService } from '../service/todo.service';
+import { Todo } from '../../model/todo';
+import { TodoService } from '../../service/todo.service';
 
 @Component({
   selector: 'app-todo-form',
   templateUrl: './todo-form.component.html',
-  styleUrls: ['./todo-form.component.scss']
 })
 export class TodoFormComponent implements OnInit {
 
