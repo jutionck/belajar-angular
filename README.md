@@ -94,16 +94,160 @@ describe("Suite description", () => {
 expect(app).toBeTruthy();
 ```
 
-> \_**Assert** masih banyak lagi ya.
+> _**Assert** masih banyak lagi ya._
 
 ### PART Unit Testing For Component
 
 1. Create unit testing `app/app.component.spec.ts`
+
+```typescript
+export class AppComponent {
+  title = "introduction-angular";
+
+  // example Statement Coverage
+  /**
+   * jumlah script function sum di bawah ini adalah 5 baris
+   * contoh: kita mengisi number1 = 10, number2 = 15
+   * maka baris yang di execute adalah = 1,2,3,5
+   * perhitunganya adalah (jumlah execute / total script) x 100
+   * hasilnya adalah (4/5) x 100 = 80%
+   */
+  sum(number1: number, number2: number): number {
+    const result = number1 + number2;
+    if (result > 0) console.log("Positve", result);
+    else console.log("Negative", result);
+
+    return result;
+  }
+}
+```
+
+```typescript
+describe("AppComponent", () => {
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AppComponent],
+    }).compileComponents();
+  });
+
+  it("should create the app", () => {
+    fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it(`should have as title 'introduction-angular'`, () => {
+    fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.title).toEqual("introduction-angular");
+  });
+
+  it(`should have a function sum(5, 6), result 11`, () => {
+    fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.sum(5, 6)).toEqual(11);
+  });
+});
+```
+
 2. Create unit testing `app/template/layouts/template-layout.component.spec.ts`
+
+```typescript
+describe("TemplateLayoutComponent", () => {
+  let component: TemplateLayoutComponent;
+  let fixture: ComponentFixture<TemplateLayoutComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({ declarations: [TemplateLayoutComponent] });
+    fixture = TestBed.createComponent(TemplateLayoutComponent);
+    component = fixture.componentInstance;
+  });
+
+  it("should create", () => {
+    expect(component).toBeDefined();
+  });
+
+  // nativeELement
+  it("should have <app-header>", () => {
+    // buat variabel untuk deteksi tag html
+    const templateElement: HTMLElement = fixture.nativeElement;
+    const appHeader = templateElement.querySelector("app-header");
+    expect(appHeader).toBeTruthy();
+  });
+});
+```
+
+Modify `app/template/layouts/template-layout.component.html` with script :
+
+```html
+<app-header></app-header>
+
+<!-- Uji coba membuat tag p -->
+<p>Template Layout Works!</p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+```
+
+Open again `app/template/layouts/template-layout.component.spec.ts` and modify like above :
+
+```typescript
+describe("TemplateLayoutComponent", () => {
+  let component: TemplateLayoutComponent;
+  let fixture: ComponentFixture<TemplateLayoutComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({ declarations: [TemplateLayoutComponent] });
+    fixture = TestBed.createComponent(TemplateLayoutComponent);
+    component = fixture.componentInstance;
+  });
+
+  it("should create", () => {
+    expect(component).toBeDefined();
+  });
+
+  // nativeELement
+  it("should have <app-header>", () => {
+    // buat variabel untuk deteksi tag html
+    const templateElement: HTMLElement = fixture.nativeElement;
+    const appHeader = templateElement.querySelector("app-header");
+    expect(appHeader).toBeTruthy();
+  });
+
+  it('should have <p> with "Template Layout Works!"', () => {
+    // buat variabel untuk deteksi tag html
+    const templateElement: HTMLElement = fixture.nativeElement;
+    const p = templateElement.querySelector("p");
+    expect(p.textContent).toEqual("Template Layout Works!");
+  });
+
+  // debugElement
+  it('should have <p> with "Template Layout Works!" use debugElement', () => {
+    // buat variabel untuk deteksi tag html
+    const templateDebug: DebugElement = fixture.debugElement;
+    const templateElement: HTMLElement = templateDebug.nativeElement;
+    const p = templateElement.querySelector("p");
+    expect(p.textContent).toEqual("Template Layout Works!");
+  });
+});
+```
+
+> _Challenge trainee dengan membuat spec test pada file di bawah ini:_
+
+<br>
+
 3. Create unit testing `app/template/components/header/header.component.spec.ts`
 4. Create unit testing `app/pages/pages.component.spec.ts`
 5. Create unit testing `app/pages/landing/components/carousel/carousel.component.spec.ts`
 6. Create unit testing `app/pages/landing/components/landing/landing.component.spec.ts`
+
 7. Create unit testing `app/pages/todos/components/todo-list/todo-list.component.spec.ts`
 8. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
 9. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`

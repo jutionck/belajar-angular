@@ -16,9 +16,11 @@ export class AppComponent {
    * perhitunganya adalah (jumlah execute / total script) x 100
    * hasilnya adalah (4/5) x 100 = 80%
    */
-  sum(number1: number, number2: number): void {
+  sum(number1: number, number2: number): number {
     const result = number1 + number2;
     if (result > 0) console.log('Positve', result);
     else console.log('Negative', result);
+
+    return result;
   }
 }

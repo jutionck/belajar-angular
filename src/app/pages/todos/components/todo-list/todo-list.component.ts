@@ -37,11 +37,6 @@ export class TodoListComponent implements OnInit {
       (error) => console.error(error)
     )
 
-    const users: Observable<any> = this.todoService.getUser();
-    users.subscribe((data) => {
-      console.log(data);
-    }, (error) => console.error(error));
-
     /**
      * Fungsi pipe:
      * 1. Delay saat request

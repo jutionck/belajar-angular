@@ -74,29 +74,6 @@ export class TodoService {
     })
   }
 
-  public getUser(): Observable<any> {
-    return new Observable((observer) => {
-      const request = fetch('https://reqres.in/api/users?page=1');
-
-      request
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          observer.next(data);
-        })
-        .catch((error) => {
-          observer.error(error);
-        })
-    })
-      .pipe(
-        tap(() => console.log('request users')),
-        retry(5),
-        map((response: any) => response.data),
-        map((users) => users.map(users => users.email))
-      )
-  }
-
   public watch(): Observable<boolean> {
     return this.taskNotifier.asObservable();
   }

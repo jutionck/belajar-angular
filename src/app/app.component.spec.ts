@@ -1,7 +1,10 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
+import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -11,25 +14,20 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`should have as title 'introduction-angular'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('introduction-angular');
   });
 
-  it('should test some asynchronous code', fakeAsync(() => {
-    let flag = false;
-    setTimeout(() => { flag = true; }, 100);
-    expect(flag).toBe(false); // PASSES
-    tick(50);
-    expect(flag).toBe(false); // PASSES
-    tick(50);
-    expect(flag).toBe(true); // PASSES
-  }));
-
+  it(`should have a function sum(5, 6), result 11`, () => {
+    fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.sum(5, 6)).toEqual(11);
+  })
 });
