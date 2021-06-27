@@ -7,7 +7,6 @@ import { Location } from "@angular/common";
 import { AppComponent } from "src/app/app.component";
 
 describe('Router: Landing()', () => {
-
   let location: Location;
   let router: Router;
   let fixture;
