@@ -249,6 +249,42 @@ describe("TemplateLayoutComponent", () => {
 6. Create unit testing `app/pages/landing/components/landing/landing.component.spec.ts`
 
 7. Create unit testing `app/pages/todos/components/todo-list/todo-list.component.spec.ts`
+
+```typescript
+describe("TodoListCoomponent", () => {
+  let component: TodoListComponent;
+  let fixture: ComponentFixture<TodoListComponent>;
+  let h1: HTMLElement;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({ declarations: [TodoListComponent] });
+    fixture = TestBed.createComponent(TodoListComponent);
+    component = fixture.componentInstance;
+    h1 = fixture.nativeElement.querySelector("h1");
+  });
+
+  // That test fails, because createComponent() doesn't bind data;
+  it("should display original title", () => {
+    expect(h1.textContent).toContain(component.title);
+  });
+});
+```
+
+> _Jalankan, akan fail. Solusinya adalah menggunakan `detectChanges()`_
+> Open again `app/pages/todos/components/todo-list/todo-list.component.spec.ts` add script like this :
+
+```typescript
+it("no title in the DOM after createComponent()", () => {
+  expect(h1.textContent).toEqual("");
+});
+
+// so, solution: use detectChanges()
+it("should display original title after detectChanges()", () => {
+  fixture.detectChanges();
+  expect(h1.textContent).toContain(component.title);
+});
+```
+
 8. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
 9. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
 10. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
@@ -256,12 +292,102 @@ describe("TemplateLayoutComponent", () => {
 ### PART Unit Testing For Directive
 
 1. Create unit testing `shared/directives/bs-button/bs-button.directive.spec.ts`
+
+```html
+<div class="row">
+  <h1>My Todo Form</h1>
+
+  <div class="alert alert-info" *ngIf="loading">
+    Menyimpan data, silahkan tunggu...
+  </div>
+
+  <form action="" [formGroup]="todoForm">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">V</span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Task name"
+        formControlName="label"
+      />
+      <button
+        type="button"
+        appBsButton
+        color="dark"
+        buttonStyle="outline"
+        (click)="addTask()"
+      >
+        ADD
+      </button>
+    </div>
+  </form>
+</div>
+```
+
+```typescript
+import { DebugElement } from "@angular/core";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { BsButtonDirective } from "src/app/shared/directives/bs-button/bs-button.directive";
+import { TodoFormComponent } from "./todo-form.component";
+
+describe("TodoFormComponent", () => {
+  let fixture: ComponentFixture<TodoFormComponent>;
+  let bsBtn: DebugElement[];
+
+  beforeEach(() => {
+    fixture = TestBed.configureTestingModule({
+      declarations: [BsButtonDirective, TodoFormComponent],
+    }).createComponent(TodoFormComponent);
+
+    // initial binding
+    fixture.detectChanges();
+
+    // all element with an attached BsButtonDirective
+    bsBtn = fixture.debugElement.queryAll(By.directive(BsButtonDirective));
+  });
+
+  // button tests
+  it("should have one appBsButton elements", () => {
+    expect(bsBtn.length).toBe(1);
+  });
+});
+```
+
 2. Create unit testing `shared/directives/bs-input/bs-input.directive.spec.ts`
+
+> _Challenge trainee again_
 
 ### PART Unit Testing For Pipe
 
-1. Create unit testing `shared/pipes/custom-date.pipe.spec.ts`
-2. Create unit testing `shared/pipes/relative-form.pipe.spec.ts`
+Open file `app/pages/users/components/list/list-user.component.spec.ts` and add script this:
+
+```typescript
+// ... //
+const titleCase: TitleCasePipe = new TitleCasePipe();
+
+// ... //
+it('transforms "abc" to "Abc"', () => {
+  expect(titleCase.transform("abc")).toBe("Abc");
+});
+
+it('transforms "abc def" to "Abc Def"', () => {
+  expect(titleCase.transform("abc def")).toBe("Abc Def");
+});
+
+// ... more tests ...
+it('leaves "Abc Def" unchanged', () => {
+  expect(titleCase.transform("Abc Def")).toBe("Abc Def");
+});
+
+it('transforms "abc-def" to "Abc-def"', () => {
+  expect(titleCase.transform("abc-def")).toBe("Abc-def");
+});
+
+it('transforms "   abc   def" to "   Abc   Def" (preserves spaces) ', () => {
+  expect(titleCase.transform("   abc   def")).toBe("   Abc   Def");
+});
+```
 
 ### PART Unit Testing For Routing
 

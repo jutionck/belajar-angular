@@ -14,7 +14,13 @@
         placeholder="Task name"
         formControlName="label"
       />
-      <button type="button" class="btn btn-outline-primary" (click)="addTask()">
+      <button
+        type="button"
+        appBsButton
+        color="dark"
+        buttonStyle="outline"
+        (click)="addTask()"
+      >
         ADD
       </button>
     </div>
