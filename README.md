@@ -614,7 +614,20 @@ describe("UserServie", () => {
 });
 ```
 
-Modify the file `app/pages/users/service/user.service.spec.ts` like this :
+2. Open file `app/pages/users/model/user.model.ts` modify become :
+
+```typescript
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
+  job?: string;
+}
+```
+
+3. Open the file `app/pages/users/service/user.service.spec.ts` modify become :
 
 ```typescript
 const page = 1;
@@ -716,3 +729,12 @@ describe("UserServie", () => {
   });
 });
 ```
+
+### PART Code Coverage
+
+> _Run with `npm run test:coverage` in terminal VS Code and Look at your root project now there is **coverage** directory, open `index.html` and running to browser._
+
+### Challenge
+
+> 1. Create unit tes for login service to API
+> 2. Completed all your component with unit test
