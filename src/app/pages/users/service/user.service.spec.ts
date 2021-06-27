@@ -5,7 +5,7 @@ import { User } from "../model/user.model";
 import { Response } from "src/app/shared/models/response.model";
 
 const page = 1;
-const expectedUrl = `https://reqres.in/api/users?page=${page}`;
+const expectedUrl = `https://reqres.in/api/users`;
 
 const expectGetUser = [
   {
@@ -50,7 +50,16 @@ const expectGetUser = [
     "last_name": "Ramos",
     "avatar": "https://reqres.in/img/faces/6-image.jpg"
   }
-]
+];
+
+const dummyUser: User = {
+  id: 0,
+  first_name: 'Jution',
+  last_name: 'Candra',
+  email: 'jutionck@mipdevp.com',
+  avatar: '-',
+  job: 'Trainer'
+}
 
 describe('UserServie', () => {
 
@@ -75,16 +84,25 @@ describe('UserServie', () => {
     expect(service).toBeTruthy();
   }))
 
-  it(`list user from ${expectedUrl}`, () => {
-    let users: User[];
+  it(`should retrieve users from the API via GET`, () => {
     userService.getAll(page).subscribe((response: Response<User[]>) => {
-      users = response.data;
-    });
-    const request = controller.expectOne(expectedUrl);
-    request.flush(expectGetUser);
+      expect(response.data.length).toBe(6);
+      expect(response.data).toEqual(expectGetUser);
 
-    expect(expectGetUser.length).toBe(6);
-    expect(users).toEqual(expectGetUser);
+    });
+    const request = controller.expectOne(`${expectedUrl}?page=${page}`);
+    request.flush(expectGetUser);
     expect(request.request.method).toBe('GET');
+  });
+
+  it(`should saving data user to API via POST`, () => {
+    userService.save(dummyUser).subscribe((response) => {
+      expect(response.first_name).toBe('Jution');
+    });
+    const request = controller.expectOne(`${expectedUrl}`);
+    request.flush(dummyUser);
+    expect(request.request.method).toBe('POST');
   })
-})
+});
+
+
