@@ -95,7 +95,7 @@ describe('UserServie', () => {
     expect(request.request.method).toBe('GET');
   });
 
-  it(`should saving data user to API via POST`, () => {
+  it(`should saving data user via POST`, () => {
     userService.save(dummyUser).subscribe((response) => {
       expect(response.first_name).toBe('Jution');
     });
