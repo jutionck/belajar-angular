@@ -389,20 +389,227 @@ it('transforms "   abc   def" to "   Abc   Def" (preserves spaces) ', () => {
 });
 ```
 
-### PART Unit Testing For Routing
-
-1. Create unit testing `app/app-routing.module.spec.ts`
-2. Create unit testing `app/pages/pages-routing.module.spec.ts`
-3. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
-4. Create unit testing `app/pages/todos/todo-routing.module.spec.ts`
-5. Create unit testing `app/pages/users/users-routing.module.spec.ts`
-
 ### PART Unit Testing For Service
 
 1. Create unit testing `app/pages/todos/service/todo.service.spec.ts`
-2. Create unit testing `app/shared/services/flash.service.spec.ts`
-3. Create unit testing `app/shared/services/string.service.spec.ts`
+
+```typescript
+describe("TodoService", () => {
+  let service: TodoService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(TodoService);
+  });
+
+  it("should be created", () => {
+    expect(service).toBeTruthy();
+  });
+
+  it("should have method getTaskPromise", () => {
+    expect(service.getTaskPromise()).toBeTruthy();
+  });
+
+  it("should have method getTaskObservable", () => {
+    expect(service.getTaskObservable()).toBeTruthy();
+  });
+});
+```
+
+> _Pada testing independent service ada `TestBed.inject(TodoService);` untuk memanggil servive dengan menggunakan `inject`_
+
+### PART Unit Testing For Module
+
+1. Open file `app/app.component.spec.ts` add script this :
+
+```typescript
+// Testing module
+describe("AppModule", () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [AppModule],
+    });
+  });
+
+  it("initializes AppModule", () => {
+    const module = TestBed.inject(AppModule);
+    expect(module).toBeTruthy();
+  });
+});
+
+describe("PagesModule", () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [PagesModule],
+    });
+  });
+
+  it("initializes PagesModule", () => {
+    const module = TestBed.inject(PagesModule);
+    expect(module).toBeTruthy();
+  });
+});
+```
+
+> _Challenge traine dengan membuat unit testing module lain seperti `landing.module`, `todo.module` dan `user.module`_
+
+### PART Unit Testing For Routing
+
+> _Part ini jelaskan dahulu untuk melakukan testing routing kita perlu menggunakan function `fakeAsync` dan `tick`_
+
+1. Create unit testing `app/app-routing.module.spec.ts`
+
+```typescript
+describe("fakeAsync and tick", () => {
+  it("fakeAsync works", fakeAsync(() => {
+    let promise = new Promise((resolve) => {
+      setTimeout(resolve, 10);
+    });
+    let done = false;
+    promise.then(() => (done = true));
+    tick(50);
+    expect(done).toBeTruthy();
+  }));
+});
+```
+
+> _Jelaskan apa itu `fakeAsync`. **fakeAsync** adalah sebuah fungsi untuk menghandle testing yang asyncrhounus, pasangannya adalag `tick`. **tick** ibarat `setTimeOut`_
+
+```typescript
+
+```
+
+2. Create unit testing `app/pages/pages-routing.module.spec.ts`
+3. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
+
+```typescript
+describe("Router: Landing()", () => {
+  let location: Location;
+  let router: Router;
+  let fixture;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes(routes)],
+      declarations: [LandingComponent, AppComponent],
+    });
+
+    router = TestBed.inject(Router); // yang lama pakai get
+    location = TestBed.inject(Location);
+
+    fixture = TestBed.createComponent(AppComponent);
+    router.initialNavigation();
+  });
+
+  it("fakeAsync works", fakeAsync(() => {
+    let promise = new Promise((resolve) => {
+      setTimeout(resolve, 10);
+    });
+    let done = false;
+    promise.then(() => (done = true));
+    tick(50);
+    expect(done).toBeTruthy();
+  }));
+
+  it('navigate to "" redirects you to /home', fakeAsync(() => {
+    router.navigate([""]).then(() => {
+      tick(50);
+      //ini harus ada, Simulates the asynchronous passage of time for the timers in the fakeAsync zone.
+      expect(location.path()).toBe("/home");
+    });
+  }));
+});
+```
+
+4. Create unit testing `app/pages/todos/todo-routing.module.spec.ts`
+5. Create unit testing `app/pages/users/users-routing.module.spec.ts`
 
 ### PART Unit Testing For Service with HTTP Services
 
 1. Create unit testing `app/pages/users/service/user.service.spec.ts`
+
+```typescript
+const page = 1;
+const expectedUrl = `https://reqres.in/api/users?page=${page}`;
+
+const expectGetUser = [
+  {
+    id: 1,
+    email: "george.bluth@reqres.in",
+    first_name: "George",
+    last_name: "Bluth",
+    avatar: "https://reqres.in/img/faces/1-image.jpg",
+  },
+  {
+    id: 2,
+    email: "janet.weaver@reqres.in",
+    first_name: "Janet",
+    last_name: "Weaver",
+    avatar: "https://reqres.in/img/faces/2-image.jpg",
+  },
+  {
+    id: 3,
+    email: "emma.wong@reqres.in",
+    first_name: "Emma",
+    last_name: "Wong",
+    avatar: "https://reqres.in/img/faces/3-image.jpg",
+  },
+  {
+    id: 4,
+    email: "eve.holt@reqres.in",
+    first_name: "Eve",
+    last_name: "Holt",
+    avatar: "https://reqres.in/img/faces/4-image.jpg",
+  },
+  {
+    id: 5,
+    email: "charles.morris@reqres.in",
+    first_name: "Charles",
+    last_name: "Morris",
+    avatar: "https://reqres.in/img/faces/5-image.jpg",
+  },
+  {
+    id: 6,
+    email: "tracey.ramos@reqres.in",
+    first_name: "Tracey",
+    last_name: "Ramos",
+    avatar: "https://reqres.in/img/faces/6-image.jpg",
+  },
+];
+
+describe("UserServie", () => {
+  let userService: UserService;
+  let controller: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [UserService],
+    });
+
+    userService = TestBed.inject(UserService);
+    controller = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    controller.verify();
+  });
+
+  it("should be created", inject([UserService], (service: UserService) => {
+    expect(service).toBeTruthy();
+  }));
+
+  it(`list user from ${expectedUrl}`, () => {
+    let users: User[];
+    userService.getAll(page).subscribe((response: Response<User[]>) => {
+      users = response.data;
+    });
+    const request = controller.expectOne(expectedUrl);
+    request.flush(expectGetUser);
+
+    expect(expectGetUser.length).toBe(6);
+    expect(users).toEqual(expectGetUser);
+    expect(request.request.method).toBe("GET");
+  });
+});
+```

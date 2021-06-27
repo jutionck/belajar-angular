@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { Todo } from '../model/todo';
 
 import { TodoService } from './todo.service';
 
@@ -14,7 +15,11 @@ describe('TodoService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('test method', () => {
+  it('should have method getTaskPromise', () => {
     expect(service.getTaskPromise()).toBeTruthy();
+  })
+
+  it('should have method getTaskObservable', () => {
+    expect(service.getTaskObservable()).toBeTruthy();
   })
 });

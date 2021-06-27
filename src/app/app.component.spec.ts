@@ -1,6 +1,8 @@
 import { DebugElement } from '@angular/core';
 import { TestBed, fakeAsync, tick, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
+import { PagesModule } from './pages/pages.module';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -31,3 +33,30 @@ describe('AppComponent', () => {
     expect(app.sum(5, 6)).toEqual(11);
   })
 });
+
+// Testing module
+describe('AppModule', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [AppModule]
+    })
+  });
+
+  it('initializes AppModule', () => {
+    const module = TestBed.inject(AppModule);
+    expect(module).toBeTruthy();
+  })
+});
+
+describe('PagesModule', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [PagesModule]
+    })
+  });
+
+  it('initializes PagesModule', () => {
+    const module = TestBed.inject(PagesModule);
+    expect(module).toBeTruthy();
+  })
+})
