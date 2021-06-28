@@ -1,4 +1,4 @@
-import { DebugElement } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { TemplateLayoutComponent } from "./template-layout.component"
 
@@ -8,7 +8,11 @@ describe('TemplateLayoutComponent', () => {
   let fixture: ComponentFixture<TemplateLayoutComponent>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ declarations: [TemplateLayoutComponent] });
+    TestBed.configureTestingModule(
+      {
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        declarations: [TemplateLayoutComponent],
+      });
     fixture = TestBed.createComponent(TemplateLayoutComponent);
     component = fixture.componentInstance;
   });

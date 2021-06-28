@@ -5,6 +5,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { LandingComponent } from "./components/landing/landing.component";
 import { Location } from "@angular/common";
 import { AppComponent } from "src/app/app.component";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 
 describe('Router: Landing()', () => {
   let location: Location;
@@ -13,6 +14,7 @@ describe('Router: Landing()', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [LandingComponent, AppComponent]
     });

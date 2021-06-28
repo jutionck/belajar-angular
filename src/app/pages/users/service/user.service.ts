@@ -15,7 +15,7 @@ export class UserService {
   ) { }
 
   getAll(page: number = 1): Observable<Response<User[]>> {
-    return this.http.get<Response<User[]>>(`${this.apiUrl}/users?page=${page}`)
+    return this.http.get<Response<User[]>>(`https://reqres.in/api/users?page=${page}`)
 
       // Demo CORS
       // return this.http

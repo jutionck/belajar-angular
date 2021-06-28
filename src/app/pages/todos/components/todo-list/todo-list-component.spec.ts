@@ -84,7 +84,7 @@ describe('TodoListComponent with Dependency', () => {
     taskList.subscribe((tasks) => {
       comp.tasks = tasks;
       expect(comp.tasks).toEqual(todoService.tasks);
-      expect(comp.tasks.length).toEqual(tasks.length);
+      // expect(comp.tasks.length).toEqual(tasks.length);
     });
   });
 
