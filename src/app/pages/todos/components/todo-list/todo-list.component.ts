@@ -22,7 +22,6 @@ export class TodoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-
     // Ketika ada variable yang ditempel tanda $ dia berarti Observable
     const taskO: Observable<Todo[]> = this.todoService.getTaskObservable();
     const taskP = this.todoService.getTaskPromise();
@@ -32,7 +31,6 @@ export class TodoListComponent implements OnInit {
         console.log('after subcribed to get task');
         this.tasks = tasks;
         console.log(tasks);
-
       },
       (error) => console.error(error)
     )

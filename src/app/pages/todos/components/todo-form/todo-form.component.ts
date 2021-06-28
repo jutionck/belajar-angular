@@ -1,6 +1,6 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { constants } from 'buffer';
 import { Todo } from '../../model/todo';
 import { TodoService } from '../../service/todo.service';
@@ -13,9 +13,10 @@ export class TodoFormComponent implements OnInit {
 
   @Output() outputTask: EventEmitter<boolean> = new EventEmitter();
 
+  // modify line code this
   todoForm: FormGroup = new FormGroup({
-    label: new FormControl('')
-  })
+    label: new FormControl('', [Validators.required, Validators.minLength(5)])
+  });
 
   loading = false;
 
@@ -33,6 +34,7 @@ export class TodoFormComponent implements OnInit {
     };
 
     this.loading = true;
+    // this.outputTask.emit(todo)
     this.todoService.setTask(todo)
       .then(() => this.todoService.getTaskPromise())
       .then((task) => {
@@ -43,5 +45,4 @@ export class TodoFormComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

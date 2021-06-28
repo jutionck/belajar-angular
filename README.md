@@ -184,9 +184,6 @@ Modify `app/template/layouts/template-layout.component.html` with script :
 ```html
 <app-header></app-header>
 
-<!-- Uji coba membuat tag p -->
-<p>Template Layout Works!</p>
-
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -220,35 +217,17 @@ describe("TemplateLayoutComponent", () => {
     const appHeader = templateElement.querySelector("app-header");
     expect(appHeader).toBeTruthy();
   });
-
-  it('should have <p> with "Template Layout Works!"', () => {
-    // buat variabel untuk deteksi tag html
-    const templateElement: HTMLElement = fixture.nativeElement;
-    const p = templateElement.querySelector("p");
-    expect(p.textContent).toEqual("Template Layout Works!");
-  });
-
-  // debugElement
-  it('should have <p> with "Template Layout Works!" use debugElement', () => {
-    // buat variabel untuk deteksi tag html
-    const templateDebug: DebugElement = fixture.debugElement;
-    const templateElement: HTMLElement = templateDebug.nativeElement;
-    const p = templateElement.querySelector("p");
-    expect(p.textContent).toEqual("Template Layout Works!");
-  });
 });
 ```
 
 > _Challenge trainee dengan membuat spec test pada file di bawah ini:_
+>
+> 1. Create unit testing `app/template/components/header/header.component.spec.ts`
+> 2. Create unit testing `app/pages/pages.component.spec.ts`
+> 3. Create unit testing `app/pages/landing/components/carousel/carousel.component.spec.ts`
+> 4. Create unit testing `app/pages/landing/components/landing/landing.component.spec.ts`
 
-<br>
-
-3. Create unit testing `app/template/components/header/header.component.spec.ts`
-4. Create unit testing `app/pages/pages.component.spec.ts`
-5. Create unit testing `app/pages/landing/components/carousel/carousel.component.spec.ts`
-6. Create unit testing `app/pages/landing/components/landing/landing.component.spec.ts`
-
-7. Create unit testing `app/pages/todos/components/todo-list/todo-list.component.spec.ts`
+3. Create unit testing `app/pages/todos/components/todo-list/todo-list.component.spec.ts`
 
 ```typescript
 describe("TodoListCoomponent", () => {
@@ -284,10 +263,6 @@ it("should display original title after detectChanges()", () => {
   expect(h1.textContent).toContain(component.title);
 });
 ```
-
-8. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
-9. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
-10. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
 
 ### PART Unit Testing For Directive
 
@@ -354,47 +329,93 @@ describe("TodoFormComponent", () => {
 });
 ```
 
-2. Create unit testing `shared/directives/bs-input/bs-input.directive.spec.ts`
-
 > _Challenge trainee again_
+>
+> 1. Create unit testing `shared/directives/bs-input/bs-input.directive.spec.ts`
 
 ### PART Unit Testing For Pipe
 
-Open file `app/pages/users/components/list/list-user.component.spec.ts` and add script this:
+Create file `app/shared/pipes/custome-date.pipe.spec.ts` and add script this:
 
 ```typescript
-// ... //
-const titleCase: TitleCasePipe = new TitleCasePipe();
+describe("CustomDatePipe", () => {
+  const date: Date = new Date();
+  const customeDate: CustomeDatePipe = new CustomeDatePipe();
+  const expectDate = "Tgl 28 Juni 2021";
 
-// ... //
-it('transforms "abc" to "Abc"', () => {
-  expect(titleCase.transform("abc")).toBe("Abc");
-});
-
-it('transforms "abc def" to "Abc Def"', () => {
-  expect(titleCase.transform("abc def")).toBe("Abc Def");
-});
-
-// ... more tests ...
-it('leaves "Abc Def" unchanged', () => {
-  expect(titleCase.transform("Abc Def")).toBe("Abc Def");
-});
-
-it('transforms "abc-def" to "Abc-def"', () => {
-  expect(titleCase.transform("abc-def")).toBe("Abc-def");
-});
-
-it('transforms "   abc   def" to "   Abc   Def" (preserves spaces) ', () => {
-  expect(titleCase.transform("   abc   def")).toBe("   Abc   Def");
+  it("transform date with customDate", () => {
+    expect(customeDate.transform(date)).toBe(expectDate);
+  });
 });
 ```
 
-### PART Unit Testing For Service
+> _Challenge trainee again_
+>
+> 1. Create unit testing, create file `app/shared/pipes/relative-from.pipe.spec.ts`
+
+### PART Unit Testing For Module
+
+1. Create file `app/module.spec.ts` add script this :
+
+```typescript
+describe("Module", () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        AppModule,
+        SharedModule,
+        TemplateModule,
+        PagesModule,
+        LandingModule,
+        TodoModule,
+        UsersModule,
+      ],
+    });
+  });
+
+  it("initialize AppModule", () => {
+    const module = TestBed.inject(AppModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize SharedModule", () => {
+    const module = TestBed.inject(SharedModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize TemplateModule", () => {
+    const module = TestBed.inject(TemplateModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize PagesModule", () => {
+    const module = TestBed.inject(PagesModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize LandingModule", () => {
+    const module = TestBed.inject(LandingModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize TodoModule", () => {
+    const module = TestBed.inject(TodoModule);
+    expect(module).toBeTruthy();
+  });
+
+  it("initialize UsersModule", () => {
+    const module = TestBed.inject(UsersModule);
+    expect(module).toBeTruthy();
+  });
+});
+```
+
+### PART Unit Testing For Service Without HTTP Service
 
 1. Create unit testing `app/pages/todos/service/todo.service.spec.ts`
 
 ```typescript
-describe("TodoService", () => {
+describe("TodoService()", () => {
   let service: TodoService;
 
   beforeEach(() => {
@@ -406,52 +427,189 @@ describe("TodoService", () => {
     expect(service).toBeTruthy();
   });
 
-  it("should have method getTaskPromise", () => {
-    expect(service.getTaskPromise()).toBeTruthy();
+  it("should have method getTaskPromise()", () => {
+    expect(service.getTaskPromise).toBeTruthy();
   });
 
-  it("should have method getTaskObservable", () => {
-    expect(service.getTaskObservable()).toBeTruthy();
+  it("should have method getTaskObservable()", () => {
+    expect(service.getTaskObservable).toBeTruthy();
+  });
+
+  it("should have method getTaskObservable()", () => {
+    expect(service.getTaskObservable).toBeTruthy();
+  });
+
+  it("should have method watch", () => {
+    expect(service.watch).toBeTruthy();
   });
 });
 ```
 
 > _Pada testing independent service ada `TestBed.inject(TodoService);` untuk memanggil servive dengan menggunakan `inject`_
 
-### PART Unit Testing For Module
-
-1. Open file `app/app.component.spec.ts` add script this :
+In file `app/pages/todos/service/todo.service.spec.ts` modify like this:
 
 ```typescript
-// Testing module
-describe("AppModule", () => {
+describe('TodoService', () => {
+
+  // .... ///
+const mockTask: Todo = {
+    id: 1,
+    label: 'Task 4',
+    checked: true
+  };
+
+it('should have metod setTask', () => {
+    expect(service.setTask(mockTask)).toBeTruthy();
+  });
+
+}
+```
+
+### Part Unit Testing Component with FormGroup and ReacriveForm
+
+1. Open file `app/pages/todos/component/todo-form/todo-form.component.ts` and modify script :
+
+```typescript
+  @Output() outputTask: EventEmitter<Todo> = new EventEmitter();
+
+  // modify line code this
+  todoForm: FormGroup = new FormGroup({
+    label: new FormControl("", [Validators.required, Validators.minLength(8)]),
+  });
+
+  addTask(): void {
+    console.log(this.todoForm.value);
+    const { id, label, checked }: Todo = this.todoForm.value;
+    const todo: Todo = {
+      id,
+      label,
+      checked
+    };
+
+    this.loading = true;
+    this.outputTask.emit(todo)
+  }
+
+  // ... ///
+}
+```
+
+> _Ada perubahan di form, kita tambahkan validasi untuk pengecekan ketika di test_
+
+2. Open file `app/pages/todos/component/todo-form/todo-form.component.spec.ts` and modify script :
+
+```typescript
+describe("TodoFormComponent", () => {
+  let fixture: ComponentFixture<TodoFormComponent>;
+  let bsBtn: DebugElement[];
+  let component: TodoFormComponent;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [AppModule],
-    });
+    fixture = TestBed.configureTestingModule({
+      declarations: [BsButtonDirective, TodoFormComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+    }).createComponent(TodoFormComponent);
+
+    // initial binding
+    fixture.detectChanges();
+
+    // all element with an attached BsButtonDirective
+    bsBtn = fixture.debugElement.queryAll(By.directive(BsButtonDirective));
+
+    //PART Reactive Form
+    component = fixture.componentInstance;
+    component.ngOnInit();
   });
 
-  it("initializes AppModule", () => {
-    const module = TestBed.inject(AppModule);
-    expect(module).toBeTruthy();
-  });
-});
-
-describe("PagesModule", () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [PagesModule],
-    });
+  // button tests
+  it("should have one appBsButton elements", () => {
+    expect(bsBtn.length).toBe(1);
   });
 
-  it("initializes PagesModule", () => {
-    const module = TestBed.inject(PagesModule);
-    expect(module).toBeTruthy();
+  // PART ReactiveForm
+  it("form invalid when empty", () => {
+    expect(component.todoForm.valid).toBeFalsy();
+  });
+
+  it("label field validity", () => {
+    let errors = {};
+    let label = component.todoForm.controls["label"];
+    // expect(label.valid).toBeFalsy();
+
+    // Label field is required
+    errors = label.errors || {};
+    expect(errors["required"]).toBeTruthy();
+
+    // Set label to something
+    label.setValue("Cry");
+    errors = label.errors || {};
+    expect(errors["required"]).toBeFalsy();
+    expect(errors["minlength"]).toBeTruthy();
+
+    // Set label to something correct
+    label.setValue("Swimming");
+    errors = label.errors || {};
+    expect(errors["required"]).toBeFalsy();
+    expect(errors["minlength"]).toBeFalsy();
+  });
+
+  it("submitting a form emits a label", () => {
+    expect(component.todoForm.valid).toBeFalsy();
+    component.todoForm.controls["label"].setValue("travelling");
+    expect(component.todoForm.valid).toBeTruthy();
+
+    let task: Todo;
+    // Subscribe to the Observable and store the user in a local variable.
+    component.outputTask.subscribe((value) => (task = value));
+
+    // Trigger the loading
+    component.loading;
+    expect(component.loading).toBe(false);
+
+    // Trigger the login function
+    component.addTask();
+
+    // Now we can check to make sure the emitted value is correct
+    expect(task.label).toBe("travelling");
   });
 });
 ```
 
-> _Challenge traine dengan membuat unit testing module lain seperti `landing.module`, `todo.module` dan `user.module`_
+> _Sekarang `todo-form.component.ts` kembali kan seperti semula_
+
+Open file `todo-form.component.spec.ts` again and modify like this :
+
+```typescript
+it('submitting a form emits a label', async () => {
+    expect(component.todoForm.valid).toBeFalsy();
+    component.todoForm.controls['label'].setValue("travelling");
+    expect(component.todoForm.valid).toBeTruthy();
+
+    let task: Todo = {
+      id: 4,
+      label: 'travelling',
+      checked: false
+    }
+    // Subscribe to the Observable and store the user in a local variable.
+    component.outputTask.subscribe((value) => task = value);
+
+    // Trigger the loading
+    expect(component.loading).toBe(false);
+
+    // Trigger the login function
+    component.addTask();
+
+    // await todoService.setTask(task)
+    //   .then(() => todoService.getTaskPromise())
+    //   .then((task) => {
+    //     expect(component.loading).toBe(true);
+    //     expect(task).toEqual(task);
+    //   });
+    expect(task.label).toEqual("travelling");
+  });
+});
+```
 
 ### PART Unit Testing For Routing
 
@@ -479,8 +637,7 @@ describe("fakeAsync and tick", () => {
 
 ```
 
-2. Create unit testing `app/pages/pages-routing.module.spec.ts`
-3. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
+2. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
 
 ```typescript
 describe("Router: Landing()", () => {
@@ -501,16 +658,6 @@ describe("Router: Landing()", () => {
     router.initialNavigation();
   });
 
-  it("fakeAsync works", fakeAsync(() => {
-    let promise = new Promise((resolve) => {
-      setTimeout(resolve, 10);
-    });
-    let done = false;
-    promise.then(() => (done = true));
-    tick(50);
-    expect(done).toBeTruthy();
-  }));
-
   it('navigate to "" redirects you to /home', fakeAsync(() => {
     router.navigate([""]).then(() => {
       tick(50);
@@ -521,8 +668,63 @@ describe("Router: Landing()", () => {
 });
 ```
 
-4. Create unit testing `app/pages/todos/todo-routing.module.spec.ts`
-5. Create unit testing `app/pages/users/users-routing.module.spec.ts`
+> _Challenge Time_:
+>
+> 1. Create unit testing `app/pages/todos/todo-routing.module.spec.ts`
+> 2. Create unit testing `app/pages/users/users-routing.module.spec.ts`
+
+### PART Unit Testing Component With Dependency
+
+1. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
+2. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
+3. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
+
+Open file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` and add script:
+
+> _The following **TodoListComponent** depends on the TodoService to showing list todo_
+
+```typescript
+describe("TodoListComponent with Dependency", () => {
+  let comp: TodoListComponent;
+  let todoService: TodoService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      // provide the component-under-test and dependent service
+      providers: [
+        TodoListComponent,
+        {
+          provide: TodoService,
+        },
+      ],
+    });
+    // inject both the component and the dependent service.
+    comp = TestBed.inject(TodoListComponent);
+    todoService = TestBed.inject(TodoService);
+  });
+
+  it("should not have task list after construction", () => {
+    expect(comp.tasks).toEqual([]);
+  });
+
+  it("should showing tasks after Angular calls ngOnInit", async () => {
+    comp.ngOnInit();
+    let taskList = await todoService.getTaskObservable();
+    taskList.subscribe((tasks) => {
+      comp.tasks = tasks;
+      expect(comp.tasks).toEqual(todoService.tasks);
+      expect(comp.tasks.length).toEqual(tasks.length);
+      // expect(comp.tasks).toEqual(tasks)
+    });
+  });
+});
+```
+
+In file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` add script:
+
+```typescript
+
+```
 
 ### PART Unit Testing For Service with HTTP Services
 

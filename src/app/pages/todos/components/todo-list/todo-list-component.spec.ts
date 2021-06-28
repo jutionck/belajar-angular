@@ -1,6 +1,11 @@
 import { TitleCasePipe } from "@angular/common";
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
+import { of } from "rxjs";
+import { UserService } from "src/app/pages/users/service/user.service";
 import { CustomeDatePipe } from "src/app/shared/pipes/custome-date.pipe";
+import { Todo } from "../../model/todo";
+import { TodoService } from "../../service/todo.service";
+import { TodoComponent } from "../../todo.component";
 import { TodoListComponent } from "./todo-list.component"
 
 describe('TodoListCoomponent', () => {
@@ -8,7 +13,6 @@ describe('TodoListCoomponent', () => {
   let component: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>
   let h1: HTMLElement;
-  const titleCase: TitleCasePipe = new TitleCasePipe();
 
   beforeEach(() => {
     TestBed.configureTestingModule({ declarations: [TodoListComponent] });
@@ -31,25 +35,110 @@ describe('TodoListCoomponent', () => {
     fixture.detectChanges();
     expect(h1.textContent).toContain(component.title);
   });
+});
 
-  it('transforms "abc" to "Abc"', () => {
-    expect(titleCase.transform('abc')).toBe('Abc');
+describe('TodoListComponent with Dependency', () => {
+  let comp: TodoListComponent;
+  let todoService: TodoService;
+  const taskMock: Todo[] = [
+    {
+      id: 1,
+      label: 'Task 1',
+      checked: true
+    },
+    {
+      id: 2,
+      label: 'Task 2',
+      checked: false
+    },
+    {
+      id: 3,
+      label: 'Task 3',
+      checked: false
+    }
+  ];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      // provide the component-under-test and dependent service
+      providers: [
+        TodoListComponent,
+        {
+          provide: TodoService
+        }
+      ]
+    });
+    // inject both the component and the dependent service.
+    comp = TestBed.inject(TodoListComponent);
+    todoService = TestBed.inject(TodoService);
   });
 
-  it('transforms "abc def" to "Abc Def"', () => {
-    expect(titleCase.transform('abc def')).toBe('Abc Def');
+  it('should not have task list after construction', () => {
+    expect(comp.tasks).toEqual([]);
   });
 
-  // ... more tests ...
-  it('leaves "Abc Def" unchanged', () => {
-    expect(titleCase.transform('Abc Def')).toBe('Abc Def');
+  it('should showing tasks after Angular calls ngOnInit', async () => {
+    comp.ngOnInit();
+    let taskList = await todoService.getTaskObservable();
+    taskList.subscribe((tasks) => {
+      comp.tasks = tasks;
+      expect(comp.tasks).toEqual(todoService.tasks);
+      expect(comp.tasks.length).toEqual(tasks.length);
+      // expect(comp.tasks).toEqual(tasks)
+    });
   });
+});
 
-  it('transforms "abc-def" to "Abc-def"', () => {
-    expect(titleCase.transform('abc-def')).toBe('Abc-def');
-  });
 
-  it('transforms "   abc   def" to "   Abc   Def" (preserves spaces) ', () => {
-    expect(titleCase.transform('   abc   def')).toBe('   Abc   Def');
-  });
-})
+// const mockTaskTodo: Todo[] = [
+//   {
+//     id: 1,
+//     label: 'Task 1',
+//     checked: true
+//   },
+//   {
+//     id: 2,
+//     label: 'Task 2',
+//     checked: false
+//   },
+//   {
+//     id: 3,
+//     label: 'Task 3',
+//     checked: false
+//   }
+// ];
+
+// describe('TodoListComponent', () => {
+//   let component: TodoListComponent;
+//   let fixture: ComponentFixture<TodoListComponent>;
+//   let mockList = mockTaskTodo;
+//   let todoService: TodoService;
+
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [TodoListComponent],
+//       providers: [TodoService]
+//     }).compileComponents();
+//   });
+
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(TodoListComponent);
+//     component = fixture.componentInstance;
+//     todoService = TestBed.inject(TodoService);
+//   });
+
+//   it('testing subscribe method', fakeAsync(() => {
+//     let taskSpy = spyOn(todoService, 'getTaskObservable').and.returnValue(of(mockList));
+//     let subSpy = spyOn(todoService.getTaskObservable(), 'subscribe');
+//     component.ngOnInit();
+//     tick();
+//     expect(taskSpy).toHaveBeenCalledBefore(subSpy);
+//     expect(subSpy).toHaveBeenCalled();
+//   }));
+
+//   it('testing execution within subscribe method', fakeAsync(() => {
+//     component.ngOnInit();
+//     expect(component.tasks).toBeDefined();
+//     expect(component.tasks.length).toBeGreaterThan(3);
+//   }))
+// });

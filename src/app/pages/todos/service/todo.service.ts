@@ -57,25 +57,10 @@ export class TodoService {
         console.log('get tasks observable');
         observer.next(this.tasks)
       }, 3000);
-
-      setTimeout(() => {
-        console.log('erorr get task observable');
-        observer.error('terjadi kesalahan');
-      }, 5000);
-
-      setTimeout(() => {
-        console.log('1 more task observable');
-        observer.next([{
-          id: 4,
-          label: 'Task 4',
-          checked: false
-        }]);
-      }, 7000);
     })
   }
 
   public watch(): Observable<boolean> {
     return this.taskNotifier.asObservable();
   }
-
 }

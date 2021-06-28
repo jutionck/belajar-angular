@@ -6,6 +6,12 @@ import { TodoService } from './todo.service';
 describe('TodoService', () => {
   let service: TodoService;
 
+  const mockTask: Todo = {
+    id: 1,
+    label: 'Task 4',
+    checked: true
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(TodoService);
@@ -17,9 +23,17 @@ describe('TodoService', () => {
 
   it('should have method getTaskPromise', () => {
     expect(service.getTaskPromise()).toBeTruthy();
-  })
+  });
 
   it('should have method getTaskObservable', () => {
     expect(service.getTaskObservable()).toBeTruthy();
-  })
+  });
+
+  it('should have method watch', () => {
+    expect(service.watch).toBeTruthy();
+  });
+
+  it('should have metod setTask', () => {
+    expect(service.setTask(mockTask)).toBeTruthy();
+  });
 });

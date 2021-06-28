@@ -80,9 +80,9 @@ describe('UserServie', () => {
     controller.verify();
   })
 
-  it('should be created', inject([UserService], (service: UserService) => {
-    expect(service).toBeTruthy();
-  }))
+  it('should be created', () => {
+    expect(userService).toBeTruthy();
+  });
 
   it(`should retrieve users from the API via GET`, () => {
     userService.getAll(page).subscribe((response: Response<User[]>) => {

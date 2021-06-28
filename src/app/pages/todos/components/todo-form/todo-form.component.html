@@ -5,7 +5,7 @@
     Menyimpan data, silahkan tunggu...
   </div>
 
-  <form action="" [formGroup]="todoForm">
+  <form [formGroup]="todoForm" (ngSubmit)="addTask()">
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon1">V</span>
       <input
@@ -14,13 +14,7 @@
         placeholder="Task name"
         formControlName="label"
       />
-      <button
-        type="button"
-        appBsButton
-        color="dark"
-        buttonStyle="outline"
-        (click)="addTask()"
-      >
+      <button type="button" appBsButton color="dark" buttonStyle="outline">
         ADD
       </button>
     </div>
