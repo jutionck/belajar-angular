@@ -621,36 +621,71 @@ it('submitting a form emits a label', async () => {
 2. Modify that file :
 
 ```typescript
+describe("Async Testing", () => {
+  it("Asynchronous test example with jasmine done()", (done: DoneFn) => {
+    let test: boolean = false;
+    setTimeout(() => {
+      console.log("running assertions");
+      test = true;
+      expect(test).toBeTruthy();
+      done();
+    }, 1000);
+  });
 
+  it("Asynchronous test example - setTimeOut", () => {
+    let test: boolean = false;
+    setTimeout(() => {
+      console.log("running assertions");
+      test = true;
+      expect(true).toBeTruthy();
+    }, 1000);
+  });
+});
 ```
 
-### PART Unit Testing For Routing
+> _Jalankan `npm run test` dan lihat pada bagian console, harusnya jika benar ada error Unchaugh expect... Karena yang di test adalah asynchronous, barulah kita menggunakan **fakeAsync** dan **tick** | perjalanan zona waktu, keduanya merupakan dependency dari `Zone.js`_
 
-> _Part ini jelaskan dahulu untuk melakukan testing routing kita perlu menggunakan function `fakeAsync` dan `tick`_
-
-1. Create unit testing `app/app-routing.module.spec.ts`
+3. Modify `app/app-async.spec.ts` :
 
 ```typescript
-describe("fakeAsync and tick", () => {
-  it("fakeAsync works", fakeAsync(() => {
-    let promise = new Promise((resolve) => {
-      setTimeout(resolve, 10);
-    });
-    let done = false;
-    promise.then(() => (done = true));
-    tick(50);
-    expect(done).toBeTruthy();
+  // ... //
+
+  it("Asynchronous test example - setTimeOut", fakeAsync(() => {
+    let test: boolean = false;
+    setTimeout(() => {
+      console.log("running assertions setTimeout");
+      test = true;
+      expect(true).toBeTruthy();
+    }, 1000);
+    tick(); //uji coba antrian;
+    tick(1000);
+    expect(test).toBeTruthy();
   }));
 });
 ```
 
-> _Jelaskan apa itu `fakeAsync`. **fakeAsync** adalah sebuah fungsi untuk menghandle testing yang asyncrhounus, pasangannya adalag `tick`. **tick** ibarat `setTimeOut`_
+> _Cek kembali pada console dan lihat perubahan nya. Tetapi di console masih ada yang error `expec`. Kenapa ? ya karena itu merupakan sebuah aysnchonous, maka dari itu silahkan ubah pada `todo-list.component.spec.ts`_
+
+4. Open file `todo-list.component.spec.ts` :
 
 ```typescript
+it("should showing tasks after Angular calls ngOnInit with observable", fakeAsync(() => {
+  comp.ngOnInit();
+  expect(comp.loading).toBe(true);
+  const taskList = todoService.getTaskObservable();
+  taskList.subscribe((tasks) => {
+    comp.tasks = tasks;
+    expect(comp.tasks).toEqual(todoService.tasks);
+    // expect(comp.tasks.length).toEqual(tasks.length);
+  });
 
+  tick(5000); //antrian ada 3
+}));
 ```
 
-2. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
+### PART Unit Testing For Routing
+
+1. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
 
 ```typescript
 describe("Router: Landing()", () => {
@@ -767,6 +802,94 @@ it("should showing tasks after Angular calls ngOnInit convert Observable toPromi
 > _Challenge Time:_
 >
 > 1. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
+
+### PART Unit Testing Component with Dependency (Service & HTTP Service)
+
+1. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
+
+```typescript
+describe("ListUserComponent", () => {
+  let component: ListUserComponent;
+  let userService: UserService;
+
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        ListUserComponent,
+        {
+          provide: UserService,
+        },
+      ],
+    });
+
+    component = TestBed.inject(ListUserComponent);
+    userService = TestBed.inject(UserService);
+  });
+
+  it("should not have user list after construction", () => {
+    expect(component.users).toEqual([]);
+  });
+
+  it("should showing users after Angular calls ngOnInit with observable", () => {
+    const dummyUsers = [
+      {
+        id: 1,
+        email: "george.bluth@reqres.in",
+        first_name: "George",
+        last_name: "Bluth",
+        avatar: "https://reqres.in/img/faces/1-image.jpg",
+      },
+      {
+        id: 2,
+        email: "janet.weaver@reqres.in",
+        first_name: "Janet",
+        last_name: "Weaver",
+        avatar: "https://reqres.in/img/faces/2-image.jpg",
+      },
+      {
+        id: 3,
+        email: "emma.wong@reqres.in",
+        first_name: "Emma",
+        last_name: "Wong",
+        avatar: "https://reqres.in/img/faces/3-image.jpg",
+      },
+      {
+        id: 4,
+        email: "eve.holt@reqres.in",
+        first_name: "Eve",
+        last_name: "Holt",
+        avatar: "https://reqres.in/img/faces/4-image.jpg",
+      },
+      {
+        id: 5,
+        email: "charles.morris@reqres.in",
+        first_name: "Charles",
+        last_name: "Morris",
+        avatar: "https://reqres.in/img/faces/5-image.jpg",
+      },
+      {
+        id: 6,
+        email: "tracey.ramos@reqres.in",
+        first_name: "Tracey",
+        last_name: "Ramos",
+        avatar: "https://reqres.in/img/faces/6-image.jpg",
+      },
+    ];
+    component.ngOnInit();
+    const userList = userService.getAll(1);
+    userList.subscribe((users: any) => {
+      component.users = users;
+      expect(component.users).toEqual(dummyUsers);
+      // expect(comp.tasks.length).toEqual(tasks.length);
+    });
+  });
+});
+```
+
+> _Challenge Time_
+>
+> 1. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
 
 ### PART Unit Testing For Service with HTTP Services
 
@@ -979,11 +1102,6 @@ describe("UserServie", () => {
   });
 });
 ```
-
-### PART Unit Testing Component with Dependency (Service & HTTP Service)
-
-1. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
-2. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
 
 ### PART Code Coverage
 

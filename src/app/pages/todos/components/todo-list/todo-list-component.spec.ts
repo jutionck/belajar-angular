@@ -77,7 +77,7 @@ describe('TodoListComponent with Dependency', () => {
     expect(comp.tasks).toEqual([]);
   });
 
-  it("should showing tasks after Angular calls ngOnInit with observable", () => {
+  it("should showing tasks after Angular calls ngOnInit with observable", fakeAsync(() => {
     comp.ngOnInit();
     expect(comp.loading).toBe(true);
     const taskList = todoService.getTaskObservable();
@@ -86,7 +86,9 @@ describe('TodoListComponent with Dependency', () => {
       expect(comp.tasks).toEqual(todoService.tasks);
       // expect(comp.tasks.length).toEqual(tasks.length);
     });
-  });
+
+    tick(5000);
+  }));
 
   it("should showing tasks after Angular calls ngOnInit convert Observable toPromise", () => {
     comp.ngOnInit();

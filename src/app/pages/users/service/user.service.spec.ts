@@ -79,7 +79,6 @@ describe('UserServie', () => {
         }
       ];
       userService.getAll(1).subscribe((response: any) => {
-        console.log(response);
         expect(response.length).toBe(6);
         expect(response).toEqual(dummyUsers);
       });
