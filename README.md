@@ -447,6 +447,8 @@ describe("TodoService()", () => {
 
 > _Pada testing independent service ada `TestBed.inject(TodoService);` untuk memanggil servive dengan menggunakan `inject`_
 
+#### Day 2
+
 In file `app/pages/todos/service/todo.service.spec.ts` modify like this:
 
 ```typescript
@@ -675,8 +677,8 @@ describe("Router: Landing()", () => {
 
 ### PART Unit Testing Component With Dependency
 
-1. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
-2. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
+1. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
+2. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
 3. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
 
 Open file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` and add script:
@@ -707,24 +709,53 @@ describe("TodoListComponent with Dependency", () => {
     expect(comp.tasks).toEqual([]);
   });
 
-  it("should showing tasks after Angular calls ngOnInit", async () => {
+  it("should showing tasks after Angular calls ngOnInit with observable", () => {
     comp.ngOnInit();
-    let taskList = await todoService.getTaskObservable();
+    expect(comp.loading).toBe(true);
+    const taskList = todoService.getTaskObservable();
     taskList.subscribe((tasks) => {
       comp.tasks = tasks;
       expect(comp.tasks).toEqual(todoService.tasks);
       expect(comp.tasks.length).toEqual(tasks.length);
-      // expect(comp.tasks).toEqual(tasks)
     });
   });
 });
 ```
 
-In file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` add script:
+Still in the same file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` demo observable convert to promosie :
 
 ```typescript
+// adding below describe('TodoListComponent with Dependency'....)
+const taskMock: Todo[] = [
+  {
+    id: 1,
+    label: "Task 1",
+    checked: true,
+  },
+  {
+    id: 2,
+    label: "Task 2",
+    checked: false,
+  },
+  {
+    id: 3,
+    label: "Task 3",
+    checked: false,
+  },
+];
 
+// .... //
+it("should showing tasks after Angular calls ngOnInit convert Observable toPromise", () => {
+  comp.ngOnInit();
+  expect(comp.loading).toBe(true);
+  todoService.getTaskObservable().toPromise();
+  expect(taskMock).toEqual(todoService.tasks);
+});
 ```
+
+> _Challenge Time:_
+>
+> 1. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
 
 ### PART Unit Testing For Service with HTTP Services
 
@@ -932,11 +963,16 @@ describe("UserServie", () => {
 });
 ```
 
+### PART Unit Testing Component with Dependency (Service & HTTP Service)
+
+1. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
+2. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
+
 ### PART Code Coverage
 
 > _Run with `npm run test:coverage` in terminal VS Code and Look at your root project now there is **coverage** directory, open `index.html` and running to browser._
 
 ### Challenge
 
-> 1. Create unit tes for login service to API
+> 1. Create unit test for login service to API
 > 2. Completed all your component with unit test

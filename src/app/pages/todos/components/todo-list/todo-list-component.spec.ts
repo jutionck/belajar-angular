@@ -58,8 +58,8 @@ describe('TodoListComponent with Dependency', () => {
     }
   ];
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       // provide the component-under-test and dependent service
       providers: [
         TodoListComponent,
@@ -77,68 +77,21 @@ describe('TodoListComponent with Dependency', () => {
     expect(comp.tasks).toEqual([]);
   });
 
-  it('should showing tasks after Angular calls ngOnInit', async () => {
+  it("should showing tasks after Angular calls ngOnInit with observable", () => {
     comp.ngOnInit();
-    let taskList = await todoService.getTaskObservable();
+    expect(comp.loading).toBe(true);
+    const taskList = todoService.getTaskObservable();
     taskList.subscribe((tasks) => {
       comp.tasks = tasks;
       expect(comp.tasks).toEqual(todoService.tasks);
       expect(comp.tasks.length).toEqual(tasks.length);
-      // expect(comp.tasks).toEqual(tasks)
     });
   });
+
+  it("should showing tasks after Angular calls ngOnInit convert Observable toPromise", () => {
+    comp.ngOnInit();
+    expect(comp.loading).toBe(true);
+    todoService.getTaskObservable().toPromise();
+    expect(taskMock).toEqual(todoService.tasks);
+  });
 });
-
-
-// const mockTaskTodo: Todo[] = [
-//   {
-//     id: 1,
-//     label: 'Task 1',
-//     checked: true
-//   },
-//   {
-//     id: 2,
-//     label: 'Task 2',
-//     checked: false
-//   },
-//   {
-//     id: 3,
-//     label: 'Task 3',
-//     checked: false
-//   }
-// ];
-
-// describe('TodoListComponent', () => {
-//   let component: TodoListComponent;
-//   let fixture: ComponentFixture<TodoListComponent>;
-//   let mockList = mockTaskTodo;
-//   let todoService: TodoService;
-
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [TodoListComponent],
-//       providers: [TodoService]
-//     }).compileComponents();
-//   });
-
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(TodoListComponent);
-//     component = fixture.componentInstance;
-//     todoService = TestBed.inject(TodoService);
-//   });
-
-//   it('testing subscribe method', fakeAsync(() => {
-//     let taskSpy = spyOn(todoService, 'getTaskObservable').and.returnValue(of(mockList));
-//     let subSpy = spyOn(todoService.getTaskObservable(), 'subscribe');
-//     component.ngOnInit();
-//     tick();
-//     expect(taskSpy).toHaveBeenCalledBefore(subSpy);
-//     expect(subSpy).toHaveBeenCalled();
-//   }));
-
-//   it('testing execution within subscribe method', fakeAsync(() => {
-//     component.ngOnInit();
-//     expect(component.tasks).toBeDefined();
-//     expect(component.tasks.length).toBeGreaterThan(3);
-//   }))
-// });

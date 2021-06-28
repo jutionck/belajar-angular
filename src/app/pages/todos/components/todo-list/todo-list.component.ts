@@ -24,7 +24,7 @@ export class TodoListComponent implements OnInit {
     this.loading = true;
     // Ketika ada variable yang ditempel tanda $ dia berarti Observable
     const taskO: Observable<Todo[]> = this.todoService.getTaskObservable();
-    const taskP = this.todoService.getTaskPromise();
+    // const taskP = this.todoService.getTaskPromise();
 
     taskO.subscribe(
       (tasks) => {
