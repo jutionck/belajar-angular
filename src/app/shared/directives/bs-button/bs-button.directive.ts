@@ -11,7 +11,6 @@ enum ButtonSize {
   large = 'btn-lg'
 }
 
-
 @Directive({
   selector: '[appBsButton]'
 })

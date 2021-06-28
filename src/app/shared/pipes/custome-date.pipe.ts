@@ -32,4 +32,7 @@ export class CustomeDatePipe implements PipeTransform {
     return `Tgl ${date.format(displayFormat)}`;
   }
 
+  // new Date = Tgl Bulan Tahun Time -> Tgl Tgl Bulan(local) Tahun
+  // 28 Juny 2021 11:29:00:00 .. -> Tgl 28 Juni 2021
+
 }
