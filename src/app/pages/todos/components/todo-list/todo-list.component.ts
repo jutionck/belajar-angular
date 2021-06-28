@@ -30,7 +30,7 @@ export class TodoListComponent implements OnInit {
       (tasks) => {
         console.log('after subcribed to get task');
         this.tasks = tasks;
-        console.log(tasks);
+        // console.log(tasks);
       },
       (error) => console.error(error)
     )

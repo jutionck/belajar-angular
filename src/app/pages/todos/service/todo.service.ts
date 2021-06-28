@@ -54,7 +54,7 @@ export class TodoService {
     // of, from, new Observabble -> Create Observable
     return new Observable((observer) => {
       setTimeout(() => {
-        console.log('get tasks observable');
+        // console.log('get tasks observable');
         observer.next(this.tasks)
       }, 3000);
     })

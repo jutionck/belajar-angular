@@ -613,6 +613,15 @@ it('submitting a form emits a label', async () => {
 });
 ```
 
+### PART fakeAsync and Tick
+
+1. Create a file `app/app-async.spec.ts`
+2. Modify that file :
+
+```typescript
+
+```
+
 ### PART Unit Testing For Routing
 
 > _Part ini jelaskan dahulu untuk melakukan testing routing kita perlu menggunakan function `fakeAsync` dan `tick`_
