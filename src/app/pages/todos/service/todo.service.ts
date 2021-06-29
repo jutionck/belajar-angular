@@ -41,7 +41,7 @@ export class TodoService {
         this.taskNotifier.next(true);
         resolve();
       }, 3000);
-    })
+    });
   }
 
   async getTaskPromise(): Promise<Todo[]> {
@@ -58,19 +58,19 @@ export class TodoService {
         observer.next(this.tasks)
       }, 3000);
 
-      setTimeout(() => {
-        console.log('erorr get task observable');
-        observer.error('terjadi kesalahan');
-      }, 5000);
+      // setTimeout(() => {
+      //   console.log('erorr get task observable');
+      //   observer.error('terjadi kesalahan');
+      // }, 5000);
 
-      setTimeout(() => {
-        console.log('1 more task observable');
-        observer.next([{
-          id: 4,
-          label: 'Task 4',
-          checked: false
-        }]);
-      }, 7000);
+      // setTimeout(() => {
+      //   console.log('1 more task observable');
+      //   observer.next([{
+      //     id: 4,
+      //     label: 'Task 4',
+      //     checked: false
+      //   }]);
+      // }, 7000);
     })
   }
 

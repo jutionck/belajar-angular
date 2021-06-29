@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { Todo } from "../model/todo";
 import { TodoService } from "./todo.service"
 
 describe('TodoService()', () => {
@@ -26,7 +27,16 @@ describe('TodoService()', () => {
     expect(service.getTaskObservable).toBeTruthy();
   });
 
-  it('should have method watch()', () => {
+  it('should have method watch', () => {
     expect(service.watch).toBeTruthy();
   });
-})
+
+  it('should have method setTask', () => {
+    const mockTask: Todo = {
+      id: 4,
+      label: 'Task 4',
+      checked: true
+    };
+    expect(service.setTask(mockTask)).toBeTruthy();
+  });
+});
