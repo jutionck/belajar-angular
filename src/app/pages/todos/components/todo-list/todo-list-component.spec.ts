@@ -37,63 +37,55 @@ describe('TodoListCoomponent', () => {
   });
 });
 
-describe('TodoListComponent with Dependency', () => {
-  let comp: TodoListComponent;
-  let todoService: TodoService;
-  const taskMock: Todo[] = [
-    {
-      id: 1,
-      label: 'Task 1',
-      checked: true
-    },
-    {
-      id: 2,
-      label: 'Task 2',
-      checked: false
-    },
-    {
-      id: 3,
-      label: 'Task 3',
-      checked: false
-    }
-  ];
+describe('TodoListComponent With DI', () => {
+  let component: TodoListComponent;
+  let todoServive: TodoService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      // provide the component-under-test and dependent service
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [
         TodoListComponent,
         {
           provide: TodoService
         }
-      ]
-    });
-    // inject both the component and the dependent service.
-    comp = TestBed.inject(TodoListComponent);
-    todoService = TestBed.inject(TodoService);
-  });
-
-  it('should not have task list after construction', () => {
-    expect(comp.tasks).toEqual([]);
-  });
-
-  it("should showing tasks after Angular calls ngOnInit with observable", fakeAsync(() => {
-    comp.ngOnInit();
-    expect(comp.loading).toBe(true);
-    const taskList = todoService.getTaskObservable();
-    taskList.subscribe((tasks) => {
-      comp.tasks = tasks;
-      expect(comp.tasks).toEqual(todoService.tasks);
-      // expect(comp.tasks.length).toEqual(tasks.length);
+      ],
     });
 
-    tick(5000);
+    component = TestBed.inject(TodoListComponent);
+    todoServive = TestBed.inject(TodoService);
+  });
+
+  it('should showing task list after create compnent', () => {
+    expect(component.tasks).toEqual([]);
+  });
+
+  it('should showing task after onInit', fakeAsync(() => {
+    const mock: Todo[] = [
+      {
+        id: 1,
+        label: 'Task 1',
+        checked: true
+      },
+      {
+        id: 2,
+        label: 'Task 2',
+        checked: false
+      },
+      {
+        id: 3,
+        label: 'Task 3',
+        checked: false
+      }
+    ];
+    component.ngOnInit();
+    expect(component.loading).toBe(true);
+    const mockTask = todoServive.getTaskObservable();
+    mockTask.subscribe((tasks) => {
+      // waktu tunggu 3 detik masuk sini
+      component.tasks = tasks;
+      expect(component.tasks).toEqual(mock);
+      expect(component.tasks.length).toEqual(mock.length);
+    });
+    tick(3000);
   }));
-
-  it("should showing tasks after Angular calls ngOnInit convert Observable toPromise", () => {
-    comp.ngOnInit();
-    expect(comp.loading).toBe(true);
-    todoService.getTaskObservable().toPromise();
-    expect(taskMock).toEqual(todoService.tasks);
-  });
 });

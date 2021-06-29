@@ -473,38 +473,9 @@ it('should have metod setTask', () => {
 1. Open file `app/pages/todos/component/todo-form/todo-form.component.ts` and modify script :
 
 ```typescript
-  @Output() outputTask: EventEmitter<Todo> = new EventEmitter();
-
-  // modify line code this
-  todoForm: FormGroup = new FormGroup({
-    label: new FormControl("", [Validators.required, Validators.minLength(8)]),
-  });
-
-  addTask(): void {
-    console.log(this.todoForm.value);
-    const { id, label, checked }: Todo = this.todoForm.value;
-    const todo: Todo = {
-      id,
-      label,
-      checked
-    };
-
-    this.loading = true;
-    this.outputTask.emit(todo)
-  }
-
-  // ... ///
-}
-```
-
-> _Ada perubahan di form, kita tambahkan validasi untuk pengecekan ketika di test_
-
-2. Open file `app/pages/todos/component/todo-form/todo-form.component.spec.ts` and modify script :
-
-```typescript
-describe("TodoFormComponent", () => {
+describe("TodoFormComponent()", () => {
   let fixture: ComponentFixture<TodoFormComponent>;
-  let bsBtn: DebugElement[];
+  let bsButton: DebugElement[]; //cek semua element yang ada di html
   let component: TodoFormComponent;
 
   beforeEach(() => {
@@ -513,103 +484,49 @@ describe("TodoFormComponent", () => {
       imports: [ReactiveFormsModule, FormsModule],
     }).createComponent(TodoFormComponent);
 
-    // initial binding
+    // initial detecChanges;
     fixture.detectChanges();
+    bsButton = fixture.debugElement.queryAll(By.directive(BsButtonDirective));
 
-    // all element with an attached BsButtonDirective
-    bsBtn = fixture.debugElement.queryAll(By.directive(BsButtonDirective));
-
-    //PART Reactive Form
+    // PART ReactiveForm
     component = fixture.componentInstance;
-    component.ngOnInit();
   });
 
-  // button tests
-  it("should have one appBsButton elements", () => {
-    expect(bsBtn.length).toBe(1);
+  it("should have one appBsButon element", () => {
+    expect(bsButton.length).toBe(1);
   });
 
   // PART ReactiveForm
-  it("form invalid when empty", () => {
-    expect(component.todoForm.valid).toBeFalsy();
-  });
+  describe("#ReactiveForm", () => {
+    it("label field validity", () => {
+      let error = {};
+      let label = component.todoForm.controls["label"];
+      expect(label.valid).toBeFalsy();
 
-  it("label field validity", () => {
-    let errors = {};
-    let label = component.todoForm.controls["label"];
-    // expect(label.valid).toBeFalsy();
-
-    // Label field is required
-    errors = label.errors || {};
-    expect(errors["required"]).toBeTruthy();
-
-    // Set label to something
-    label.setValue("Cry");
-    errors = label.errors || {};
-    expect(errors["required"]).toBeFalsy();
-    expect(errors["minlength"]).toBeTruthy();
-
-    // Set label to something correct
-    label.setValue("Swimming");
-    errors = label.errors || {};
-    expect(errors["required"]).toBeFalsy();
-    expect(errors["minlength"]).toBeFalsy();
-  });
-
-  it("submitting a form emits a label", () => {
-    expect(component.todoForm.valid).toBeFalsy();
-    component.todoForm.controls["label"].setValue("travelling");
-    expect(component.todoForm.valid).toBeTruthy();
-
-    let task: Todo;
-    // Subscribe to the Observable and store the user in a local variable.
-    component.outputTask.subscribe((value) => (task = value));
-
-    // Trigger the loading
-    component.loading;
-    expect(component.loading).toBe(false);
-
-    // Trigger the login function
-    component.addTask();
-
-    // Now we can check to make sure the emitted value is correct
-    expect(task.label).toBe("travelling");
+      // label field is required
+      error = label.errors || {};
+      expect(error["required"]).toBeTruthy();
+      // set label
+      // toBeFalse => cek value
+      // toBeFalsy => cek variable
+      label.setValue("Reading");
+      error = label.errors || {};
+      expect(error["required"]).toBeFalsy();
+      expect(error["minlength"]).toBeFalsy();
+    });
   });
 });
 ```
 
-> _Sekarang `todo-form.component.ts` kembali kan seperti semula_
-
-Open file `todo-form.component.spec.ts` again and modify like this :
+Open file `todo-form.component.spec.ts` again and add script like this for submiting test:
 
 ```typescript
-it('submitting a form emits a label', async () => {
-    expect(component.todoForm.valid).toBeFalsy();
-    component.todoForm.controls['label'].setValue("travelling");
-    expect(component.todoForm.valid).toBeTruthy();
-
-    let task: Todo = {
-      id: 4,
-      label: 'travelling',
-      checked: false
-    }
-    // Subscribe to the Observable and store the user in a local variable.
-    component.outputTask.subscribe((value) => task = value);
-
-    // Trigger the loading
-    expect(component.loading).toBe(false);
-
-    // Trigger the login function
-    component.addTask();
-
-    // await todoService.setTask(task)
-    //   .then(() => todoService.getTaskPromise())
-    //   .then((task) => {
-    //     expect(component.loading).toBe(true);
-    //     expect(task).toEqual(task);
-    //   });
-    expect(task.label).toEqual("travelling");
-  });
+it("submiting a form emits a label", () => {
+  expect(component.todoForm.valid).toBeFalsy();
+  component.todoForm.controls["label"].setValue("Traveling");
+  expect(component.todoForm.valid).toBeTruthy();
+  // component.addTask(); -> Component with Dependency
+  expect(component.outputTask).toBeTruthy();
 });
 ```
 
@@ -621,65 +538,41 @@ it('submitting a form emits a label', async () => {
 2. Modify that file :
 
 ```typescript
-describe("Async Testing", () => {
-  it("Asynchronous test example with jasmine done()", (done: DoneFn) => {
+describe("AysncTest", () => {
+  it("asynchronous test example - setTimeout", () => {
     let test: boolean = false;
     setTimeout(() => {
       console.log("running assertions");
       test = true;
       expect(test).toBeTruthy();
-      done();
     }, 1000);
-  });
-
-  it("Asynchronous test example - setTimeOut", () => {
-    let test: boolean = false;
-    setTimeout(() => {
-      console.log("running assertions");
-      test = true;
-      expect(true).toBeTruthy();
-    }, 1000);
+    // akan fail karena test bersifat async tetapi belum menerapakan fakeAsync
   });
 });
 ```
 
 > _Jalankan `npm run test` dan lihat pada bagian console, harusnya jika benar ada error Unchaugh expect... Karena yang di test adalah asynchronous, barulah kita menggunakan **fakeAsync** dan **tick** | perjalanan zona waktu, keduanya merupakan dependency dari `Zone.js`_
 
-3. Modify `app/app-async.spec.ts` :
+3. Modify `app/app-async.spec.ts` adding `fakeAsync` and `tick` :
 
 ```typescript
-  // ... //
+// ... //
+// fakeAsync & tick => sebuah fungsi untuk perjalanan waktu
+// tick ini sama seperti setTimeOut (unit test) -> mock setTimeOut
+// yang mana tick ini pasti ada fakeAsync()
+// tick ini gak boleh kurang dari setTimeOut, tapi bisa lebih
 
-  it("Asynchronous test example - setTimeOut", fakeAsync(() => {
-    let test: boolean = false;
-    setTimeout(() => {
-      console.log("running assertions setTimeout");
-      test = true;
-      expect(true).toBeTruthy();
-    }, 1000);
-    tick(); //uji coba antrian;
-    tick(1000);
-    expect(test).toBeTruthy();
-  }));
-});
-```
-
-> _Cek kembali pada console dan lihat perubahan nya. Tetapi di console masih ada yang error `expec`. Kenapa ? ya karena itu merupakan sebuah aysnchonous, maka dari itu silahkan ubah pada `todo-list.component.spec.ts`_
-
-4. Open file `todo-list.component.spec.ts` :
-
-```typescript
-it("should showing tasks after Angular calls ngOnInit with observable", fakeAsync(() => {
-  comp.ngOnInit();
-  expect(comp.loading).toBe(true);
-  const taskList = todoService.getTaskObservable();
-  taskList.subscribe((tasks) => {
-    comp.tasks = tasks;
-    expect(comp.tasks).toEqual(todoService.tasks);
-    // expect(comp.tasks.length).toEqual(tasks.length);
-  });
-
-  tick(5000); //antrian ada 3
+it("asynchronous test example - setTimeout with fakeAsync", fakeAsync(() => {
+  let test: boolean = false;
+  setTimeout(() => {
+    console.log("running assertions setTimeOut with fakeAsync");
+    test = true;
+  }, 1000);
+  expect(test).toBe(false);
+  tick(500);
+  expect(test).toBe(false);
+  tick(500);
+  expect(test).toBe(true);
 }));
 ```
 
@@ -688,28 +581,24 @@ it("should showing tasks after Angular calls ngOnInit with observable", fakeAsyn
 1. Create unit testing `app/pages/landings/landing-routing.module.spec.ts`
 
 ```typescript
-describe("Router: Landing()", () => {
+describe("LandingRouting", () => {
   let location: Location;
   let router: Router;
   let fixture;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [LandingComponent, AppComponent],
+      imports: [RouterTestingModule.withRoutes([]), LandingRoutingModule],
     });
-
-    router = TestBed.inject(Router); // yang lama pakai get
+    router = TestBed.inject(Router);
     location = TestBed.inject(Location);
-
-    fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(LandingComponent);
     router.initialNavigation();
   });
 
   it('navigate to "" redirects you to /home', fakeAsync(() => {
     router.navigate([""]).then(() => {
       tick(50);
-      //ini harus ada, Simulates the asynchronous passage of time for the timers in the fakeAsync zone.
       expect(location.path()).toBe("/home");
     });
   }));
@@ -721,24 +610,31 @@ describe("Router: Landing()", () => {
 > 1. Create unit testing `app/pages/todos/todo-routing.module.spec.ts`
 > 2. Create unit testing `app/pages/users/users-routing.module.spec.ts`
 
+4. Open file `todo-list.component.spec.ts` :
+
+```typescript
+
+```
+
 ### PART Unit Testing Component With Dependency
 
 1. Create unit testing `app/pages/users/components/list/list-user.component.spec.ts`
 2. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
 3. Create unit testing `app/pages/users/components/form/form-user.component.spec.ts`
 
-Open file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` and add script:
+> _Code dimulai_
+
+1. Open file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` and add script:
 
 > _The following **TodoListComponent** depends on the TodoService to showing list todo_
 
 ```typescript
-describe("TodoListComponent with Dependency", () => {
-  let comp: TodoListComponent;
-  let todoService: TodoService;
+describe("TodoListComponent With DI", () => {
+  let component: TodoListComponent;
+  let todoServive: TodoService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // provide the component-under-test and dependent service
       providers: [
         TodoListComponent,
         {
@@ -746,62 +642,52 @@ describe("TodoListComponent with Dependency", () => {
         },
       ],
     });
-    // inject both the component and the dependent service.
-    comp = TestBed.inject(TodoListComponent);
-    todoService = TestBed.inject(TodoService);
+
+    component = TestBed.inject(TodoListComponent);
+    todoServive = TestBed.inject(TodoService);
   });
 
-  it("should not have task list after construction", () => {
-    expect(comp.tasks).toEqual([]);
+  it("should showing task list after create compnent", () => {
+    expect(component.tasks).toEqual([]);
   });
 
-  it("should showing tasks after Angular calls ngOnInit with observable", () => {
-    comp.ngOnInit();
-    expect(comp.loading).toBe(true);
-    const taskList = todoService.getTaskObservable();
-    taskList.subscribe((tasks) => {
-      comp.tasks = tasks;
-      expect(comp.tasks).toEqual(todoService.tasks);
-      expect(comp.tasks.length).toEqual(tasks.length);
+  it("should showing task after onInit", fakeAsync(() => {
+    const mock: Todo[] = [
+      {
+        id: 1,
+        label: "Task 1",
+        checked: true,
+      },
+      {
+        id: 2,
+        label: "Task 2",
+        checked: false,
+      },
+      {
+        id: 3,
+        label: "Task 3",
+        checked: false,
+      },
+    ];
+    component.ngOnInit();
+    expect(component.loading).toBe(true);
+    const mockTask = todoServive.getTaskObservable();
+    mockTask.subscribe((tasks) => {
+      // waktu tunggu 3 detik masuk sini
+      component.tasks = tasks;
+      expect(component.tasks).toEqual(mock);
+      expect(component.tasks.length).toEqual(mock.length);
     });
-  });
-});
-```
-
-Still in the same file `app/pages/todos/components/todo-list/todo-list.component.spec.ts` demo observable convert to promosie :
-
-```typescript
-// adding below describe('TodoListComponent with Dependency'....)
-const taskMock: Todo[] = [
-  {
-    id: 1,
-    label: "Task 1",
-    checked: true,
-  },
-  {
-    id: 2,
-    label: "Task 2",
-    checked: false,
-  },
-  {
-    id: 3,
-    label: "Task 3",
-    checked: false,
-  },
-];
-
-// .... //
-it("should showing tasks after Angular calls ngOnInit convert Observable toPromise", () => {
-  comp.ngOnInit();
-  expect(comp.loading).toBe(true);
-  todoService.getTaskObservable().toPromise();
-  expect(taskMock).toEqual(todoService.tasks);
+    tick(3000);
+  }));
 });
 ```
 
 > _Challenge Time:_
 >
 > 1. Create unit testing `app/pages/todos/components/todo-form/todo-form.component.spec.ts`
+
+#### Day 3
 
 ### PART Unit Testing Component with Dependency (Service & HTTP Service)
 
