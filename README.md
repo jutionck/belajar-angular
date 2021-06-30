@@ -21,6 +21,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 3. fakeAsync and tick (v)
 4. Routing (v)
 5. Component with Dependency (v)
-6. Component with Dependency (Service with HTTP Service) (optional)
-7. Service with HTTP Service
-8. Code Covarage
+
+#### Day 3
+
+1. Component with Dependency (Service with HTTP Service) (discord)
+2. Service with HTTP Service (v)
+3. Code Covarage
