@@ -7,4 +7,23 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'introduction-angular';
+
+  person = {
+    name: 'Jution',
+    age: 25,
+    address: 'Jakarta Barat'
+  };
+
+  isValid(): boolean {
+    return true;
+  }
+
+  numberCheck(a: number): boolean {
+    if (a < 10) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
 }
