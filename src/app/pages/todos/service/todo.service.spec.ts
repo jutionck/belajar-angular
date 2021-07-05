@@ -1,16 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Todo } from '../model/todo';
 
 import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
   let service: TodoService;
-
-  const mockTask: Todo = {
-    id: 1,
-    label: 'Task 4',
-    checked: true
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -33,7 +27,13 @@ describe('TodoService', () => {
     expect(service.watch).toBeTruthy();
   });
 
-  it('should have metod setTask', () => {
+  it('should have metod setTask', fakeAsync(() => {
+    const mockTask: Todo = {
+      id: 1,
+      label: 'Task 4',
+      checked: true
+    };
     expect(service.setTask(mockTask)).toBeTruthy();
-  });
+    tick(3000);
+  }));
 });

@@ -33,10 +33,10 @@ describe('UserServie', () => {
   }));
 
   describe('#getUsers', () => {
-    it('should return an Observable<Response<User[]>>', () => {
+    it('should return an Observable<Response<User[]>>', (done) => {
       const dummyUsers = [
         {
-          "id": 1,
+          "id": 2,
           "email": "george.bluth@reqres.in",
           "first_name": "George",
           "last_name": "Bluth",
@@ -81,6 +81,9 @@ describe('UserServie', () => {
       userService.getAll(1).subscribe((response: any) => {
         expect(response.length).toBe(6);
         expect(response).toEqual(dummyUsers);
+        console.log(response);
+
+        done();
       });
       const request = httpMock.expectOne(`${expectedUrl}?page=${page}`);
       request.flush(dummyUsers);
