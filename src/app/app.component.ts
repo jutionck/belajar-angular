@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IncrementDecrementService } from './increment-decrement.service';
 
 @Component({
   selector: 'app-root',
@@ -8,22 +9,14 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'introduction-angular';
 
-  person = {
-    name: 'Jution',
-    age: 25,
-    address: 'Jakarta Barat'
+  constructor(public incrementDecrementService: IncrementDecrementService) { }
+
+  increment() {
+    this.incrementDecrementService.increment();
   };
 
-  isValid(): boolean {
-    return true;
+  decrement() {
+    this.incrementDecrementService.decrement();
   }
 
-  numberCheck(a: number): boolean {
-    if (a < 10) {
-      return true
-    }
-    else {
-      return false
-    }
-  }
 }
