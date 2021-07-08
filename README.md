@@ -370,3 +370,125 @@ describe('The "toBeCloseTo" matcher specified precision of the expected value', 
 ```
 
 > _**toBeCloseTo(expected, precision)** default **precison** is 2_
+
+### PART Spies
+
+1. Create file `increment-decrement.service.ts` and add script like below:
+
+```typescript
+@Inject
+export class IncrementDecrementService {
+  value: number = 0;
+  message!: string;
+
+  increment() {
+    if (this.value < 15) {
+      this.value += 1;
+      this.message = "";
+    } else {
+      this.message = "Maximum reached!";
+    }
+  }
+
+  decrement() {
+    if (this.value > 0) {
+      this.value -= 1;
+      this.message = "";
+    } else {
+      this.message = "Minimum reached!";
+    }
+  }
+}
+```
+
+2. Open `app.component.ts` and add script like below :
+
+```typescript
+export class AppComponent {
+  title = "introduction-angular";
+
+  constructor(public incrementDecrementService: IncrementDecrementService) {}
+
+  increment() {
+    this.incrementDecrementService.increment();
+  }
+
+  decrement() {
+    this.incrementDecrementService.decrement();
+  }
+}
+```
+
+3. Open `app.component.spec.ts` and modify script like below :
+
+```typescript
+import { DebugElement } from "@angular/core";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { IncrementDecrementService } from "./increment-decrement.service";
+
+describe("AppComponent", () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let debugElement: DebugElement;
+  let incrementDecrementService: IncrementDecrementService;
+  let incrementSpy;
+
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [AppComponent],
+        providers: [IncrementDecrementService],
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(AppComponent);
+      debugElement = fixture.debugElement;
+
+      incrementDecrementService = debugElement.injector.get(
+        IncrementDecrementService
+      );
+      incrementSpy = spyOn(
+        incrementDecrementService,
+        "increment"
+      ).and.callThrough();
+    })
+  );
+
+  it("should call increment on the service", () => {
+    debugElement
+      .query(By.css("button.increment"))
+      .triggerEventHandler("click", null);
+
+    expect(incrementDecrementService.value).toBe(1);
+    expect(incrementSpy).toHaveBeenCalled();
+  });
+
+  it("should increment in template", () => {
+    debugElement
+      .query(By.css("button.increment"))
+      .triggerEventHandler("click", null);
+
+    fixture.detectChanges();
+
+    const value = debugElement.query(By.css("h1")).nativeElement.innerText;
+
+    expect(value).toEqual("1");
+  });
+
+  it("should stop at 15 and show maximum message", () => {
+    incrementDecrementService.value = 15;
+    debugElement
+      .query(By.css("button.increment"))
+      .triggerEventHandler("click", null);
+
+    fixture.detectChanges();
+
+    const value = debugElement.query(By.css("h1")).nativeElement.innerText;
+    const message = debugElement.query(By.css("p.message")).nativeElement
+      .innerText;
+
+    expect(value).toEqual("15");
+    expect(message).toContain("Maximum");
+  });
+});
+```
